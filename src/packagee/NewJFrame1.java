@@ -4,6 +4,14 @@
  */
 package packagee;
 
+import core.models.Specialty;
+import core.models.RoomType;
+import core.models.Patient;
+import core.models.Hospitalization;
+import core.models.Doctor;
+import core.models.AppointmentStatus;
+import core.models.Appointment;
+import core.models.Administrator;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

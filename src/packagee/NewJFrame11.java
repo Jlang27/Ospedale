@@ -4,6 +4,11 @@
  */
 package packagee;
 
+import core.models.Specialty;
+import core.models.Patient;
+import core.models.Hospitalization;
+import core.models.Doctor;
+import core.models.Appointment;
 import java.awt.Color;
 import java.util.ArrayList;
 
