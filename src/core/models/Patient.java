@@ -8,6 +8,7 @@ import core.models.Hospitalization;
 import core.models.Appointment;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import packagee.User;
 
 /**
@@ -65,5 +66,20 @@ public class Patient extends User {
         this.address = address;
         this.appointments = new ArrayList<>();
     }
-    
+
+    public HashMap<String, String> serialize() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", String.valueOf(id));
+        map.put("username", username);
+        map.put("firstname", firstname);
+        map.put("lastname", lastname);
+        map.put("password", password);
+        map.put("email", email);
+        map.put("birthdate", birthdate.toString());
+        map.put("gender", String.valueOf(gender));
+        map.put("phone", String.valueOf(phone));
+        map.put("address", address);
+        return map;
+    }
+
 }

@@ -6,8 +6,9 @@ package core.models;
 
 import core.models.Appointment;
 import java.util.ArrayList;
-import packagee.Hospitalization;
-import packagee.Specialty;
+import java.util.HashMap;
+import core.models.Hospitalization;
+import core.models.Specialty;
 import packagee.User;
 
 /**
@@ -52,5 +53,18 @@ public class Doctor extends User {
 
     public void setAssignedOffice(String assignedOffice) {
         this.assignedOffice = assignedOffice;
+    }
+
+    public HashMap<String, String> serialize() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", String.valueOf(id));
+        map.put("username", username);
+        map.put("firstname", firstname);
+        map.put("lastname", lastname);
+        map.put("password", password);
+        map.put("specialty", specialty.name());
+        map.put("licenceNumber", licenceNumber);
+        map.put("assignedOffice", assignedOffice);
+        return map;
     }
 }
