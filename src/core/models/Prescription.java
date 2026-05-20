@@ -5,6 +5,7 @@
 package core.models;
 
 import core.models.Appointment;
+import java.util.HashMap;
 
 /**
  *
@@ -29,7 +30,17 @@ public class Prescription {
         this.additionalInstructions = additionalInstructions;
         this.frecuency = frecuency;
     }
-    
-    
-    
+
+    public HashMap<String, String> serialize() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("appointmentId", appointment.getId());
+        map.put("medicationName", medicationName);
+        map.put("dose", String.valueOf(dose));
+        map.put("administrationRoute", administrationRoute);
+        map.put("treatmentDuration", String.valueOf(treatmentDuration));
+        map.put("additionalInstructions", additionalInstructions);
+        map.put("frecuency", String.valueOf(frecuency));
+        return map;
+    }
+
 }

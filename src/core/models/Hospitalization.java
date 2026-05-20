@@ -6,6 +6,7 @@ package core.models;
 
 import core.models.Doctor;
 import java.time.LocalDate;
+import java.util.HashMap;
 import packagee.HospitalizationStatus;
 import packagee.Patient;
 import packagee.RoomType;
@@ -31,6 +32,19 @@ public class Hospitalization {
 
     public void setStatus(HospitalizationStatus status) {
         this.status = status;
+    }
+
+    public HashMap<String, String> serialize() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("patientId", String.valueOf(patient.getId()));
+        map.put("doctorId", String.valueOf(doctor.getId()));
+        map.put("date", date.toString());
+        map.put("reason", reason);
+        map.put("roomType", roomType.name());
+        map.put("observations", observations);
+        map.put("status", status.name());
+        return map;
     }
 
     public Hospitalization(String id, Patient patient, Doctor doctor, LocalDate date, String reason, RoomType roomType, String observations) {

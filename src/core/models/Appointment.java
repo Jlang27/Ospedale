@@ -6,6 +6,7 @@ package core.models;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import packagee.AppointmentStatus;
 import packagee.Doctor;
 import packagee.Patient;
@@ -99,5 +100,22 @@ public class Appointment {
     public boolean addPrescription(Prescription prescrip) {
         return this.prescriptions.add(prescrip);
     }
-    
+
+    public HashMap<String, String> serialize() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("patientId", String.valueOf(patient.getId()));
+        map.put("doctorId", String.valueOf(doctor.getId()));
+        map.put("specialty", specialty.name());
+        map.put("datetime", datetime.toString());
+        map.put("reason", reason);
+        map.put("type", String.valueOf(type));
+        map.put("status", status.name());
+        map.put("diagnosis", diagnosis);
+        map.put("observations", observations);
+        map.put("recommendedTreatment", recommendedTreatment);
+        map.put("followUp", followUp);
+        return map;
+    }
+
 }
