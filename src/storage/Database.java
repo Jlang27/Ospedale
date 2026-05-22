@@ -25,14 +25,14 @@ import packagee.User;
  */
 public class Database {
     
-    private static Database instance;        // la única instancia
+    private static Database instance;       
     private final List<User> users = new ArrayList<>();
     private final List<Appointment> appointments = new ArrayList<>();
     private final List<Hospitalization> hospitalizations = new ArrayList<>();
  
-    private Database() { loadUsers(); }      // constructor PRIVADO
+    private Database() { loadUsers(); }     
  
-    public static Database getInstance() {   // punto de acceso único
+    public static Database getInstance() {   
         if (instance == null) instance = new Database();
         return instance;
     }
@@ -85,6 +85,17 @@ public class Database {
     public List<User> getUsers() { return users; }
     public List<Appointment> getAppointments() { return appointments; }
     public List<Hospitalization> getHospitalizations() { return hospitalizations; }
+    
+    
+    public String nextAppointmentId(long patientId) {
+    int count = 0;
+    String prefix = "A-" + patientId + "-";
+    for (Appointment a : appointments)
+        if (a.getId().startsWith(prefix)) count++;
+    return prefix + String.format("%04d", count);  
+}
+
+    
 }
 
     
