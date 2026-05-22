@@ -7,11 +7,10 @@ package core.models;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import packagee.AppointmentStatus;
-import packagee.Doctor;
-import packagee.Patient;
-import packagee.Prescription;
-import packagee.Specialty;
+import core.models.AppointmentStatus;
+import core.models.Doctor;
+import core.models.Prescription;
+import core.models.Specialty;
 
 /**
  *
