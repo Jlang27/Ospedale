@@ -8,7 +8,7 @@ import core.models.Doctor;
 import java.time.LocalDate;
 import java.util.HashMap;
 import core.models.HospitalizationStatus;
-import packagee.Patient;
+import core.models.Patient;
 import core.models.RoomType;
 
 /**
