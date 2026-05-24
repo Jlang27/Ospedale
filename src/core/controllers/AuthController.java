@@ -4,7 +4,7 @@ import core.controllers.utils.Response;
 import core.models.Administrator;
 import core.models.Doctor;
 import java.util.HashMap;
-import packagee.User;
+import views.User;
 import storage.Database;
 
 public class AuthController {

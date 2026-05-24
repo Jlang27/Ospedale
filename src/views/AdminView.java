@@ -1,4 +1,4 @@
-package packagee;
+package views;
 
 import core.controllers.DoctorController;
 import core.controllers.PatientController;
@@ -46,36 +46,36 @@ public class AdminView extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     private void initComponents() {
 
-        panelRound1 = new packagee.PanelRound();
-        panelRound2 = new packagee.PanelRound();
+        panelRound1 = new views.PanelRound();
+        panelRound2 = new views.PanelRound();
         btnClose = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        panelRound3 = new packagee.PanelRound();
+        lblTitle = new javax.swing.JLabel();
+        panelRound3 = new views.PanelRound();
         btnDoctorView = new javax.swing.JButton();
         btnPatientView = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        lblFirstname = new javax.swing.JLabel();
         txtFirstname = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        lblLastname = new javax.swing.JLabel();
         txtLastname = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        lblId = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblSpecialty = new javax.swing.JLabel();
+        lblLicenseNumber = new javax.swing.JLabel();
         txtLicenseNumber = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
+        lblAssignedOffice = new javax.swing.JLabel();
         txtAssignedOffice = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
         txtUser = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
+        lblPassword = new javax.swing.JLabel();
         txtPasswordDoc = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
+        lblPasswordConfirm = new javax.swing.JLabel();
         txtPasswordConfirm = new javax.swing.JTextField();
         cbSpecialty = new javax.swing.JComboBox<>();
         btnSave = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         cbDoctor = new javax.swing.JComboBox<>();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
+        lblDoctor = new javax.swing.JLabel();
+        lblPatient = new javax.swing.JLabel();
         cbPatient = new javax.swing.JComboBox<>();
         jSeparator2 = new javax.swing.JSeparator();
         btnLogout = new javax.swing.JButton();
@@ -110,8 +110,8 @@ public class AdminView extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Yu Gothic UI", 0, 14));
-        jLabel1.setText("ADMIN VIEW");
+        lblTitle.setFont(new java.awt.Font("Yu Gothic UI", 0, 14));
+        lblTitle.setText("ADMIN VIEW");
 
         javax.swing.GroupLayout panelRound2Layout = new javax.swing.GroupLayout(panelRound2);
         panelRound2.setLayout(panelRound2Layout);
@@ -119,7 +119,7 @@ public class AdminView extends javax.swing.JFrame {
             panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnClose)
                 .addGap(19, 19, 19))
@@ -129,7 +129,7 @@ public class AdminView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                 panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1))
+                .addComponent(lblTitle))
         );
 
         btnDoctorView.setFont(new java.awt.Font("Yu Gothic UI", 1, 18));
@@ -148,39 +148,39 @@ public class AdminView extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel4.setText("Firstname");
+        lblFirstname.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblFirstname.setText("Firstname");
         txtFirstname.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel5.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel5.setText("Lastname");
+        lblLastname.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblLastname.setText("Lastname");
         txtLastname.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel6.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel6.setText("ID");
+        lblId.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblId.setText("ID");
         txtId.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel7.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel7.setText("Specialty");
+        lblSpecialty.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblSpecialty.setText("Specialty");
 
-        jLabel8.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel8.setText("License Number");
+        lblLicenseNumber.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblLicenseNumber.setText("License Number");
         txtLicenseNumber.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel9.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel9.setText("Assigned office");
+        lblAssignedOffice.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblAssignedOffice.setText("Assigned office");
         txtAssignedOffice.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel10.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel10.setText("User");
+        lblUser.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblUser.setText("User");
         txtUser.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel11.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel11.setText("Password");
+        lblPassword.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblPassword.setText("Password");
         txtPasswordDoc.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel12.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel12.setText("Password confirmation");
+        lblPasswordConfirm.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblPasswordConfirm.setText("Password confirmation");
         txtPasswordConfirm.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
         cbSpecialty.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
@@ -203,11 +203,11 @@ public class AdminView extends javax.swing.JFrame {
         cbDoctor.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
         cbDoctor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Select one"}));
 
-        jLabel13.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel13.setText("Doctor");
+        lblDoctor.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblDoctor.setText("Doctor");
 
-        jLabel14.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel14.setText("Patient");
+        lblPatient.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblPatient.setText("Patient");
 
         cbPatient.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
         cbPatient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Select one"}));
@@ -237,42 +237,42 @@ public class AdminView extends javax.swing.JFrame {
                         .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelRound3Layout.createSequentialGroup()
                                 .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel7))
+                                    .addComponent(lblFirstname)
+                                    .addComponent(lblSpecialty))
                                 .addGap(18, 18, 18)
                                 .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(panelRound3Layout.createSequentialGroup()
                                         .addComponent(cbSpecialty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jLabel8)
+                                        .addComponent(lblLicenseNumber)
                                         .addGap(18, 18, 18)
                                         .addComponent(txtLicenseNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(panelRound3Layout.createSequentialGroup()
                                         .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(35, 35, 35)
-                                        .addComponent(jLabel5)
+                                        .addComponent(lblLastname)
                                         .addGap(18, 18, 18)
                                         .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jLabel6)
+                                        .addComponent(lblId)
                                         .addGap(18, 18, 18)
                                         .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(panelRound3Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
+                                .addComponent(lblAssignedOffice)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtAssignedOffice, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelRound3Layout.createSequentialGroup()
                                 .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(panelRound3Layout.createSequentialGroup()
-                                        .addComponent(jLabel10)
+                                        .addComponent(lblUser)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(panelRound3Layout.createSequentialGroup()
-                                        .addComponent(jLabel11)
+                                        .addComponent(lblPassword)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(txtPasswordDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(panelRound3Layout.createSequentialGroup()
-                                        .addComponent(jLabel12)
+                                        .addComponent(lblPasswordConfirm)
                                         .addGap(18, 18, 18)
                                         .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(333, 333, 333)))
@@ -286,7 +286,7 @@ public class AdminView extends javax.swing.JFrame {
                                         .addComponent(cbDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(panelRound3Layout.createSequentialGroup()
                                         .addGap(47, 47, 47)
-                                        .addComponent(jLabel13)))
+                                        .addComponent(lblDoctor)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(74, 74, 74))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound3Layout.createSequentialGroup()
@@ -304,7 +304,7 @@ public class AdminView extends javax.swing.JFrame {
                                 .addComponent(cbPatient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(panelRound3Layout.createSequentialGroup()
                         .addGap(59, 59, 59)
-                        .addComponent(jLabel14)))
+                        .addComponent(lblPatient)))
                 .addGap(88, 88, 88))
             .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound3Layout.createSequentialGroup()
@@ -320,39 +320,39 @@ public class AdminView extends javax.swing.JFrame {
             .addGroup(panelRound3Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(lblFirstname)
                     .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
+                    .addComponent(lblLastname)
                     .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
+                    .addComponent(lblId)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
+                    .addComponent(lblSpecialty)
                     .addComponent(cbSpecialty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8)
+                    .addComponent(lblLicenseNumber)
                     .addComponent(txtLicenseNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
+                    .addComponent(lblAssignedOffice)
                     .addComponent(txtAssignedOffice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelRound3Layout.createSequentialGroup()
                         .addGap(81, 81, 81)
                         .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
+                            .addComponent(lblUser)
                             .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
+                            .addComponent(lblPassword)
                             .addComponent(txtPasswordDoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(15, 15, 15)
                         .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
+                            .addComponent(lblPasswordConfirm)
                             .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(panelRound3Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
-                        .addComponent(jLabel13)
+                        .addComponent(lblDoctor)
                         .addGap(18, 18, 18)
                         .addComponent(cbDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
@@ -364,7 +364,7 @@ public class AdminView extends javax.swing.JFrame {
                 .addGap(38, 38, 38))
             .addGroup(panelRound3Layout.createSequentialGroup()
                 .addGap(203, 203, 203)
-                .addComponent(jLabel14)
+                .addComponent(lblPatient)
                 .addGap(18, 18, 18)
                 .addComponent(cbPatient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
@@ -489,18 +489,18 @@ public class AdminView extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbSpecialty;
     private javax.swing.JComboBox<String> cbDoctor;
     private javax.swing.JComboBox<String> cbPatient;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblFirstname;
+    private javax.swing.JLabel lblLastname;
+    private javax.swing.JLabel lblId;
+    private javax.swing.JLabel lblSpecialty;
+    private javax.swing.JLabel lblLicenseNumber;
+    private javax.swing.JLabel lblAssignedOffice;
+    private javax.swing.JLabel lblUser;
+    private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblPasswordConfirm;
+    private javax.swing.JLabel lblDoctor;
+    private javax.swing.JLabel lblPatient;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField txtFirstname;
@@ -511,7 +511,7 @@ public class AdminView extends javax.swing.JFrame {
     private javax.swing.JTextField txtUser;
     private javax.swing.JTextField txtPasswordDoc;
     private javax.swing.JTextField txtPasswordConfirm;
-    private packagee.PanelRound panelRound1;
-    private packagee.PanelRound panelRound2;
-    private packagee.PanelRound panelRound3;
+    private views.PanelRound panelRound1;
+    private views.PanelRound panelRound2;
+    private views.PanelRound panelRound3;
 }

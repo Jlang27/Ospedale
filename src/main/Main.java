@@ -3,7 +3,7 @@ package main;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import javax.swing.UIManager;
-import packagee.LoginView;
+import views.LoginView;
 import storage.Database;
 
 public class Main {

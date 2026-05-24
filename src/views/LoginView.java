@@ -1,4 +1,4 @@
-package packagee;
+package views;
 
 import core.controllers.AuthController;
 import core.controllers.PatientController;
@@ -19,11 +19,11 @@ public class LoginView extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     private void initComponents() {
 
-        panelRound1 = new packagee.PanelRound();
-        panelRound2 = new packagee.PanelRound();
+        panelRound1 = new views.PanelRound();
+        panelRound2 = new views.PanelRound();
         btnClose = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        panelRound3 = new packagee.PanelRound();
+        panelRound3 = new views.PanelRound();
         jLabel1 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -470,9 +470,9 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private packagee.PanelRound panelRound1;
-    private packagee.PanelRound panelRound2;
-    private packagee.PanelRound panelRound3;
+    private views.PanelRound panelRound1;
+    private views.PanelRound panelRound2;
+    private views.PanelRound panelRound3;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtBirthdate;
     private javax.swing.JTextField txtEmail;
