@@ -384,8 +384,7 @@ public class LoginView extends javax.swing.JFrame {
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {
         System.exit(0);
     }
-
-   private void btnEnterActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnEnterActionPerformed(java.awt.event.ActionEvent evt) {
     String username = txtUser.getText();
     String password = new String(txtPassword.getPassword());
 
