@@ -17,6 +17,7 @@ public class LoginView extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         panelRound1 = new packagee.PanelRound();
@@ -370,23 +371,23 @@ public class LoginView extends javax.swing.JFrame {
         );
 
         pack();
-    }
+    }// </editor-fold>//GEN-END:initComponents
 
-    private void panelRound2MousePressed(java.awt.event.MouseEvent evt) {
+    private void panelRound2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRound2MousePressed
         x = evt.getX();
         y = evt.getY();
-    }
+    }//GEN-LAST:event_panelRound2MousePressed
 
-    private void panelRound2MouseDragged(java.awt.event.MouseEvent evt) {
+    private void panelRound2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRound2MouseDragged
         this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
-    }
+    }//GEN-LAST:event_panelRound2MouseDragged
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         System.exit(0);
-    }
+    }//GEN-LAST:event_btnCloseActionPerformed
 
-   private void btnEnterActionPerformed(java.awt.event.ActionEvent evt) {
-    String username = txtUser.getText();
+   private void btnEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnterActionPerformed
+    String username = txtUsername.getText();
     String password = txtPassword.getText();
 
     Response response = AuthController.login(username, password);
@@ -410,9 +411,9 @@ public class LoginView extends javax.swing.JFrame {
             patient.setVisible(true);
         }
     }
-}
+}//GEN-LAST:event_btnEnterActionPerformed
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         String firstname = txtFirstname.getText();
         String lastname = txtLastname.getText();
         String idStr = txtId.getText();
@@ -446,13 +447,13 @@ public class LoginView extends javax.swing.JFrame {
             txtBirthdate.setText("");
             cbGender.setSelectedIndex(0);
         }
-    }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void txtPasswordConfirmActionPerformed(java.awt.event.ActionEvent evt) {
+    private void txtPasswordConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordConfirmActionPerformed
         // no action needed
-    }
+    }//GEN-LAST:event_txtPasswordConfirmActionPerformed
 
-    // Variables declaration
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnEnter;
     private javax.swing.JButton btnSave;
@@ -488,6 +489,7 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JTextField txtPhone;
     private javax.swing.JTextField txtUser;
     private javax.swing.JTextField txtUsername;
+    // End of variables declaration//GEN-END:variables
     private javax.swing.JTextField txtAddress2;
     private javax.swing.JTextField txtBirthdate2;
 }

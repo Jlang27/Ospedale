@@ -48,6 +48,7 @@ public class AdminView extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         panelRound1 = new packagee.PanelRound();
@@ -408,22 +409,22 @@ public class AdminView extends javax.swing.JFrame {
         );
 
         pack();
-    }
+    }// </editor-fold>//GEN-END:initComponents
 
-    private void panelRound2MousePressed(java.awt.event.MouseEvent evt) {
+    private void panelRound2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRound2MousePressed
         x = evt.getX();
         y = evt.getY();
-    }
+    }//GEN-LAST:event_panelRound2MousePressed
 
-    private void panelRound2MouseDragged(java.awt.event.MouseEvent evt) {
+    private void panelRound2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRound2MouseDragged
         this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
-    }
+    }//GEN-LAST:event_panelRound2MouseDragged
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         System.exit(0);
-    }
+    }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         String firstname = txtFirstname.getText();
         String lastname = txtLastname.getText();
         String idStr = txtId.getText();
@@ -454,9 +455,9 @@ public class AdminView extends javax.swing.JFrame {
             txtPasswordConfirm.setText("");
             loadDoctors();
         }
-    }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void btnDoctorViewActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnDoctorViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoctorViewActionPerformed
         String selectedDoctor = (String) cbDoctor.getSelectedItem();
         if (selectedDoctor == null || selectedDoctor.equals("Select one")) {
             JOptionPane.showMessageDialog(this, "Selecciona un doctor de la lista");
@@ -465,9 +466,9 @@ public class AdminView extends javax.swing.JFrame {
         DoctorView doctor = new DoctorView(selectedDoctor, adminUsername);
         this.setVisible(false);
         doctor.setVisible(true);
-    }
+    }//GEN-LAST:event_btnDoctorViewActionPerformed
 
-    private void btnPatientViewActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnPatientViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatientViewActionPerformed
         String selectedPatient = (String) cbPatient.getSelectedItem();
         if (selectedPatient == null || selectedPatient.equals("Select one")) {
             JOptionPane.showMessageDialog(this, "Selecciona un paciente de la lista");
@@ -476,15 +477,15 @@ public class AdminView extends javax.swing.JFrame {
         PatientView patient = new PatientView(selectedPatient, adminUsername);
         this.setVisible(false);
         patient.setVisible(true);
-    }
+    }//GEN-LAST:event_btnPatientViewActionPerformed
 
-    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         LoginView login = new LoginView();
         this.setVisible(false);
         login.setVisible(true);
-    }
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
-    // Variables declaration
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnDoctorView;
     private javax.swing.JButton btnPatientView;
@@ -518,4 +519,5 @@ public class AdminView extends javax.swing.JFrame {
     private packagee.PanelRound panelRound1;
     private packagee.PanelRound panelRound2;
     private packagee.PanelRound panelRound3;
+    // End of variables declaration//GEN-END:variables
 }

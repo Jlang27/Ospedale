@@ -74,6 +74,7 @@ public class PatientView extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         panelRound1 = new packagee.PanelRound();
@@ -756,38 +757,38 @@ public class PatientView extends javax.swing.JFrame {
         );
 
         pack();
-    }
+    }// </editor-fold>//GEN-END:initComponents
 
-    private void panelRound2MousePressed(java.awt.event.MouseEvent evt) {
+    private void panelRound2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRound2MousePressed
         x = evt.getX();
         y = evt.getY();
-    }
+    }//GEN-LAST:event_panelRound2MousePressed
 
-    private void panelRound2MouseDragged(java.awt.event.MouseEvent evt) {
+    private void panelRound2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRound2MouseDragged
         this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
-    }
+    }//GEN-LAST:event_panelRound2MouseDragged
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         System.exit(0);
-    }
+    }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         AdminView admin = new AdminView(adminUsername);
         this.setVisible(false);
         admin.setVisible(true);
-    }
+    }//GEN-LAST:event_btnBackActionPerformed
 
-    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         LoginView login = new LoginView();
         this.setVisible(false);
         login.setVisible(true);
-    }
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         loadAppointments();
-    }
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         String firstname = txtFirstname.getText();
         String lastname = txtLastname.getText();
         String birthdate = txtBirthdate.getText();
@@ -811,9 +812,9 @@ public class PatientView extends javax.swing.JFrame {
             txtPassword.setText("");
             txtPasswordConfirm.setText("");
         }
-    }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void rbSpecialtyActionPerformed(java.awt.event.ActionEvent evt) {
+    private void rbSpecialtyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbSpecialtyActionPerformed
         if (rbDoctor.isSelected()) rbDoctor.setSelected(false);
         Response response = DoctorController.getSpecialties();
         cbDoctorOrSpecialty.removeAllItems();
@@ -824,9 +825,9 @@ public class PatientView extends javax.swing.JFrame {
                 cbDoctorOrSpecialty.addItem(s);
             }
         }
-    }
+    }//GEN-LAST:event_rbSpecialtyActionPerformed
 
-    private void rbDoctorActionPerformed(java.awt.event.ActionEvent evt) {
+    private void rbDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDoctorActionPerformed
         if (rbSpecialty.isSelected()) rbSpecialty.setSelected(false);
         Response response = DoctorController.getAll();
         cbDoctorOrSpecialty.removeAllItems();
@@ -837,9 +838,9 @@ public class PatientView extends javax.swing.JFrame {
                 cbDoctorOrSpecialty.addItem(doc);
             }
         }
-    }
+    }//GEN-LAST:event_rbDoctorActionPerformed
 
-    private void btnCreateAppointmentActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnCreateAppointmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateAppointmentActionPerformed
         String selected = (String) cbDoctorOrSpecialty.getSelectedItem();
         String date = txtAppointmentDate.getText();
         String time = txtAppointmentTime.getText();
@@ -869,9 +870,9 @@ public class PatientView extends javax.swing.JFrame {
             rbDoctor.setSelected(false);
             loadAppointments();
         }
-    }
+    }//GEN-LAST:event_btnCreateAppointmentActionPerformed
 
-    private void btnCreateHospitalizationActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnCreateHospitalizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateHospitalizationActionPerformed
         String reason = taHospitalizationReason.getText();
         String doctor = (String) cbAttendingDoctor.getSelectedItem();
         String admissionDate = txtAdmissionDate.getText();
@@ -891,9 +892,9 @@ public class PatientView extends javax.swing.JFrame {
             cbRoomType.setSelectedIndex(0);
             taObservations.setText("");
         }
-    }
+    }//GEN-LAST:event_btnCreateHospitalizationActionPerformed
 
-    private void btnCancelAppointmentActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnCancelAppointmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelAppointmentActionPerformed
         String appointmentId = (String) cbAppointmentToCancel.getSelectedItem();
         String observations = taObservationsCancel.getText();
 
@@ -905,9 +906,9 @@ public class PatientView extends javax.swing.JFrame {
             taObservationsCancel.setText("");
             loadAppointments();
         }
-    }
+    }//GEN-LAST:event_btnCancelAppointmentActionPerformed
 
-    // Variables declaration
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCancelAppointment;
     private javax.swing.JButton btnClose;
@@ -979,4 +980,5 @@ public class PatientView extends javax.swing.JFrame {
     private javax.swing.JTextField txtUser;
     private packagee.PanelRound panelRound1;
     private packagee.PanelRound panelRound2;
+    // End of variables declaration//GEN-END:variables
 }
