@@ -1,13 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package core.controllers;
 
-/**
- *
- * @author josel
- */
+import core.controllers.utils.Response;
+
 public class HospitalizationController {
-    
+
+    public static Response request(String username, String doctor, String reason,
+            String admissionDate, String roomType, String observations) {
+        return new Response("Not implemented", 500);
+    }
+
+    public static Response getByDoctor(String username) {
+        return new Response("Not implemented", 500);
+    }
+
+    public static Response approve(String id) {
+        return new Response("Not implemented", 500);
+    }
+
+    public static Response deny(String id) {
+        return new Response("Not implemented", 500);
+    }
 }

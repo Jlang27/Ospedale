@@ -1,9 +1,1 @@
 /build/
-
-# NetBeans
-nbproject/private/
-nbproject/config.properties
-build/
-dist/
-nbbuild/
-nbdist/
