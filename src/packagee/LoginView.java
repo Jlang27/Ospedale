@@ -385,32 +385,30 @@ public class LoginView extends javax.swing.JFrame {
         System.exit(0);
     }
     private void btnEnterActionPerformed(java.awt.event.ActionEvent evt) {
-    String username = txtUser.getText();
+    String username = txtUsername.getText();
     String password = txtPassword.getText();
 
     Response response = AuthController.login(username, password);
-    JOptionPane.showMessageDialog(this, response.getMessage());
 
-    if (response.getStatus() == 200) {
-        String loggedUser = username;
+    if (response.getStatus() >= 500) {
+        JOptionPane.showMessageDialog(null, response.getMessage(),
+            "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+    } else if (response.getStatus() >= 400) {
+        JOptionPane.showMessageDialog(null, response.getMessage(),
+            "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+    } else {
         String role = (String) response.getData().get("role");
 
         if ("admin".equals(role)) {
-            AdminView admin = new AdminView(loggedUser);
-            this.setVisible(false);
-            admin.setVisible(true);
+            new AdminView(username).setVisible(true);
         } else if ("doctor".equals(role)) {
-            DoctorView doctor = new DoctorView(loggedUser, null);
-            this.setVisible(false);
-            doctor.setVisible(true);
+            new DoctorView(username, null).setVisible(true);
         } else {
-            PatientView patient = new PatientView(loggedUser, null);
-            this.setVisible(false);
-            patient.setVisible(true);
+            new PatientView(username, null).setVisible(true);
         }
+        this.dispose();
     }
 }
-
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {
         String firstname = txtFirstname.getText();
         String lastname = txtLastname.getText();
