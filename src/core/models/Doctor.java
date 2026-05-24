@@ -54,7 +54,7 @@ public class Doctor extends User {
     public void setAssignedOffice(String assignedOffice) {
         this.assignedOffice = assignedOffice;
     }
-//nigg
+
     public HashMap<String, String> serialize() {
         HashMap<String, String> map = new HashMap<>();
         map.put("id", String.valueOf(id));
