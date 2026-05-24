@@ -1,32 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package core.controllers;
-import core.models.*;
+
+import core.controllers.utils.Response;
+import core.models.Administrator;
+import core.models.Doctor;
+import core.models.User;
+import java.util.HashMap;
 import storage.Database;
 
-
-/**
- *
- * @author josel
- */
 public class AuthController {
-    private final Database db = Database.getInstance();
-    
-    public Response login(String username, String password){
-        if(username.isEmpty() || password.isEmpty()){
-            return new Response(400, "Complete los campos de usuario y contraseña", null);
+
+    public static Response login(String username, String password) {
+        if (username.isEmpty() || password.isEmpty()) {
+            return new Response("Complete los campos de usuario y contraseña", 400);
         }
+        Database db = Database.getInstance();
         User u = db.findUserByUsername(username);
-        if (u == null){
-            return new Response(404, "El usuario No existe", null);
+        if (u == null) {
+            return new Response("El usuario no existe", 404);
         }
-        if(!u.getPassword().equals(password)){
-            return new Response(400, "Contraseña incorrecta", null);
+        if (!u.getPassword().equals(password)) {
+            return new Response("Contraseña incorrecta", 400);
         }
-        
         String role = (u instanceof Administrator) ? "admin" : (u instanceof Doctor) ? "doctor" : "patient";
-        java.util.Map<String, String> data
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("username", u.getUsername());
+        data.put("role", role);
+        return new Response("Login exitoso", 200, data);
     }
 }
