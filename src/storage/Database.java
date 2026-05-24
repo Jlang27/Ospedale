@@ -93,10 +93,25 @@ public class Database {
     for (Appointment a : appointments)
         if (a.getId().startsWith(prefix)) count++;
     return prefix + String.format("%04d", count);  
-}
-
+    }
     
-}
-
+    public String nextHospitalizationId(long patientId) {
+        int count = 0;
+        String prefix = "H-" + patientId + "-";
+        for (Hospitalization h : hospitalizations)
+            if (h.getId().startsWith(prefix)) count++;
+        return prefix + String.format("%04d", count);
+    }
     
-
+    public void addUser(User user) {
+        users.add(user);
+    }
+ 
+    public void addAppointment(Appointment appointment) {
+        appointments.add(appointment);
+    }
+ 
+    public void addHospitalization(Hospitalization hospitalization) {
+        hospitalizations.add(hospitalization);
+    }   
+}

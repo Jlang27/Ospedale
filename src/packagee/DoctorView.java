@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
  * @author jjlora
  * @author edangulo
  */
-public class NewJFrame111 extends javax.swing.JFrame {
+public class DoctorView extends javax.swing.JFrame {
 
     private int x, y;
     private User user;
@@ -35,7 +35,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
     private ArrayList<Appointment>appointments;
     private Doctor doctor;
     private Patient patient;
-    public NewJFrame111(User user,Doctor doc, ArrayList<User> users,ArrayList<Hospitalization> hospitalizations,ArrayList<Appointment> appointments) {
+    public DoctorView(User user,Doctor doc, ArrayList<User> users,ArrayList<Hospitalization> hospitalizations,ArrayList<Appointment> appointments) {
         initComponents();
         this.user = user;
         this.users =users;
