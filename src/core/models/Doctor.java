@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import core.models.Hospitalization;
 import core.models.Specialty;
-import packagee.User;
 
 /**
  *

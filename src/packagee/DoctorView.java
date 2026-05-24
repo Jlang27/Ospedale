@@ -4,6 +4,7 @@
  */
 package packagee;
 
+import core.models.User;
 import core.models.Specialty;
 import core.models.RoomType;
 import core.models.Prescription;
