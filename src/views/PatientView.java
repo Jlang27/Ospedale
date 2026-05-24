@@ -774,13 +774,13 @@ public class PatientView extends javax.swing.JFrame {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         AdminView admin = new AdminView(adminUsername);
-        this.setVisible(false);
+        this.dispose();
         admin.setVisible(true);
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         LoginView login = new LoginView();
-        this.setVisible(false);
+        this.dispose();
         login.setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
@@ -806,9 +806,12 @@ public class PatientView extends javax.swing.JFrame {
             address, username, password, passwordConfirm
         );
 
-        JOptionPane.showMessageDialog(this, response.getMessage());
-
-        if (response.getStatus() == 200) {
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
             txtPassword.setText("");
             txtPasswordConfirm.setText("");
         }
@@ -978,12 +981,6 @@ public class PatientView extends javax.swing.JFrame {
     private javax.swing.JTextField txtPasswordConfirm;
     private javax.swing.JTextField txtPhone;
     private javax.swing.JTextField txtUser;
-<<<<<<< HEAD:src/views/PatientView.java
     private views.PanelRound panelRound1;
     private views.PanelRound panelRound2;
-=======
-    private packagee.PanelRound panelRound1;
-    private packagee.PanelRound panelRound2;
-    // End of variables declaration//GEN-END:variables
->>>>>>> origin/Angulo:src/packagee/PatientView.java
 }

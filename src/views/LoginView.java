@@ -24,35 +24,35 @@ public class LoginView extends javax.swing.JFrame {
         btnClose = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         panelRound3 = new views.PanelRound();
-        jLabel1 = new javax.swing.JLabel();
+        lblLoginTitle = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        lblLoginUsername = new javax.swing.JLabel();
         txtPassword = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        lblLoginPassword = new javax.swing.JLabel();
         btnEnter = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        lblRegFirstname = new javax.swing.JLabel();
         txtFirstname = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        lblRegLastname = new javax.swing.JLabel();
         txtLastname = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        lblRegId = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblRegGender = new javax.swing.JLabel();
+        lblRegPhone = new javax.swing.JLabel();
         txtPhone = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
+        lblRegEmail = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
+        lblRegUsername = new javax.swing.JLabel();
         txtUser = new javax.swing.JTextField();
         txtPasswordReg = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        lblRegPassword = new javax.swing.JLabel();
+        lblRegPasswordConfirm = new javax.swing.JLabel();
         txtPasswordConfirm = new javax.swing.JTextField();
         cbGender = new javax.swing.JComboBox<>();
         btnSave = new javax.swing.JButton();
-        jLabel13 = new javax.swing.JLabel();
+        lblRegAddress = new javax.swing.JLabel();
         txtAddress = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
+        lblRegBirthdate = new javax.swing.JLabel();
         txtBirthdate = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -100,20 +100,20 @@ public class LoginView extends javax.swing.JFrame {
                 javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("Yu Gothic UI", 1, 24));
-        jLabel1.setText("LOGIN");
+        lblLoginTitle.setFont(new java.awt.Font("Yu Gothic UI", 1, 24));
+        lblLoginTitle.setText("LOGIN");
 
         txtUsername.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
         txtUsername.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel2.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel2.setText("USERNAME");
+        lblLoginUsername.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblLoginUsername.setText("USERNAME");
 
         txtPassword.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
         txtPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel3.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel3.setText("PASSWORD");
+        lblLoginPassword.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblLoginPassword.setText("PASSWORD");
 
         btnEnter.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
         btnEnter.setText("ENTER");
@@ -129,7 +129,7 @@ public class LoginView extends javax.swing.JFrame {
             panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound3Layout.createSequentialGroup()
                 .addContainerGap(475, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(lblLoginTitle)
                 .addGap(481, 481, 481))
             .addGroup(panelRound3Layout.createSequentialGroup()
                 .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,8 +138,8 @@ public class LoginView extends javax.swing.JFrame {
                         .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound3Layout.createSequentialGroup()
                                 .addGroup(panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addComponent(lblLoginPassword, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblLoginUsername, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(24, 24, 24))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                                 panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,13 +154,13 @@ public class LoginView extends javax.swing.JFrame {
             panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRound3Layout.createSequentialGroup()
                 .addGap(63, 63, 63)
-                .addComponent(jLabel1)
+                .addComponent(lblLoginTitle)
                 .addGap(74, 74, 74)
-                .addComponent(jLabel2)
+                .addComponent(lblLoginUsername)
                 .addGap(18, 18, 18)
                 .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addComponent(lblLoginPassword)
                 .addGap(18, 18, 18)
                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
@@ -170,40 +170,40 @@ public class LoginView extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Login", panelRound3);
 
-        jLabel4.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel4.setText("Firstname");
+        lblRegFirstname.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegFirstname.setText("Firstname");
         txtFirstname.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel5.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel5.setText("Lastname");
+        lblRegLastname.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegLastname.setText("Lastname");
         txtLastname.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel6.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel6.setText("ID");
+        lblRegId.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegId.setText("ID");
         txtId.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel7.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel7.setText("Gender");
+        lblRegGender.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegGender.setText("Gender");
 
-        jLabel8.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel8.setText("Phone");
+        lblRegPhone.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegPhone.setText("Phone");
         txtPhone.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel9.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel9.setText("Email");
+        lblRegEmail.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegEmail.setText("Email");
         txtEmail.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel10.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel10.setText("User");
+        lblRegUsername.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegUsername.setText("User");
         txtUser.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
         txtPasswordReg.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel11.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel11.setText("Password");
+        lblRegPassword.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegPassword.setText("Password");
 
-        jLabel12.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel12.setText("Password confirmation");
+        lblRegPasswordConfirm.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegPasswordConfirm.setText("Password confirmation");
 
         txtPasswordConfirm.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
         txtPasswordConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -223,12 +223,12 @@ public class LoginView extends javax.swing.JFrame {
             }
         });
 
-        jLabel13.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel13.setText("Address");
+        lblRegAddress.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegAddress.setText("Address");
         txtAddress.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
-        jLabel14.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
-        jLabel14.setText("Birthdate");
+        lblRegBirthdate.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
+        lblRegBirthdate.setText("Birthdate");
         txtBirthdate.setFont(new java.awt.Font("Yu Gothic UI", 0, 18));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -239,7 +239,7 @@ public class LoginView extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(450, 450, 450)
-                        .addComponent(jLabel11))
+                        .addComponent(lblRegPassword))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(434, 434, 434)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,7 +247,7 @@ public class LoginView extends javax.swing.JFrame {
                             .addComponent(txtPasswordReg, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(473, 473, 473)
-                        .addComponent(jLabel10))
+                        .addComponent(lblRegUsername))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(432, 432, 432)
                         .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -256,42 +256,42 @@ public class LoginView extends javax.swing.JFrame {
                         .addComponent(btnSave))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(396, 396, 396)
-                        .addComponent(jLabel12))
+                        .addComponent(lblRegPasswordConfirm))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(91, 91, 91)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel14)
+                                .addComponent(lblRegBirthdate)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtBirthdate, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
+                                .addComponent(lblRegFirstname)
                                 .addGap(34, 34, 34)
                                 .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel13))
+                            .addComponent(lblRegLastname)
+                            .addComponent(lblRegAddress))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel6)
+                                .addComponent(lblRegId)
                                 .addGap(30, 30, 30)
                                 .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel7)
+                                .addComponent(lblRegGender)
                                 .addGap(26, 26, 26)
                                 .addComponent(cbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel8)
+                                .addComponent(lblRegPhone)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel9)
+                                .addComponent(lblRegEmail)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(97, Short.MAX_VALUE))
@@ -301,36 +301,36 @@ public class LoginView extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(lblRegFirstname)
                     .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
+                    .addComponent(lblRegLastname)
                     .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
+                    .addComponent(lblRegId)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
+                    .addComponent(lblRegGender)
                     .addComponent(cbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel14)
+                        .addComponent(lblRegBirthdate)
                         .addComponent(txtBirthdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel13)
+                        .addComponent(lblRegAddress)
                         .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel8)
+                        .addComponent(lblRegPhone)
                         .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel9)
+                        .addComponent(lblRegEmail)
                         .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-                .addComponent(jLabel10)
+                .addComponent(lblRegUsername)
                 .addGap(18, 18, 18)
                 .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel11)
+                .addComponent(lblRegPassword)
                 .addGap(18, 18, 18)
                 .addComponent(txtPasswordReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel12)
+                .addComponent(lblRegPasswordConfirm)
                 .addGap(18, 18, 18)
                 .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
@@ -428,9 +428,12 @@ public class LoginView extends javax.swing.JFrame {
             email, birthdate, gender, phone, address
         );
 
-        JOptionPane.showMessageDialog(this, response.getMessage());
-
-        if (response.getStatus() == 200) {
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
             txtFirstname.setText("");
             txtLastname.setText("");
             txtId.setText("");
@@ -454,20 +457,20 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JButton btnEnter;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox<String> cbGender;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel lblLoginTitle;
+    private javax.swing.JLabel lblLoginUsername;
+    private javax.swing.JLabel lblLoginPassword;
+    private javax.swing.JLabel lblRegFirstname;
+    private javax.swing.JLabel lblRegLastname;
+    private javax.swing.JLabel lblRegId;
+    private javax.swing.JLabel lblRegGender;
+    private javax.swing.JLabel lblRegPhone;
+    private javax.swing.JLabel lblRegEmail;
+    private javax.swing.JLabel lblRegUsername;
+    private javax.swing.JLabel lblRegPassword;
+    private javax.swing.JLabel lblRegPasswordConfirm;
+    private javax.swing.JLabel lblRegAddress;
+    private javax.swing.JLabel lblRegBirthdate;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private views.PanelRound panelRound1;

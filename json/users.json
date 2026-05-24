@@ -197,7 +197,7 @@
       "firstname": "Mauricio",
       "lastname": "Escobar",
       "password": "Doc@5678",
-      "specialty": "TRAUMATOLOGY_ORTHOPEDICS",
+      "specialty": "ORTHOPEDICS",
       "licenceNumber": "L-5678901234 MTL",
       "assignedOffice": "O-305"
     },
@@ -208,7 +208,7 @@
       "firstname": "Gloria",
       "lastname": "Fuentes",
       "password": "Doc@6789",
-      "specialty": "GYNECOLOGY_OBSTETRICS",
+      "specialty": "GYNECOLOGY",
       "licenceNumber": "L-6789012345 MTL",
       "assignedOffice": "O-306"
     },

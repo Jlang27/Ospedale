@@ -6,362 +6,1510 @@ package views;
 
 import core.controllers.DoctorController;
 import core.controllers.HospitalizationController;
+import core.controllers.PatientController;
 import core.controllers.utils.Response;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.util.HashMap;
-import javax.swing.*;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ *
+ * @author jjlora
+ * @author edangulo
+ */
 public class DoctorView extends javax.swing.JFrame {
 
+    private int x, y;
     private String viewedUsername;
     private String adminUsername;
 
-    // Header
-    private JLabel lblDoctorName;
-    private JLabel lblSpecialty;
-    private JButton btnBack;
-    private JButton btnLogout;
-
-    // Tab 1 - Appointments
-    private JComboBox<String> cbFilter;
-    private JButton btnRefreshAppointments;
-    private JTable tblAppointments;
-    private JButton btnAccept;
-    private JButton btnComplete;
-    private JButton btnHospitalize;
-    private JTextField txtNewTime;
-    private JTextField txtRescheduleReason;
-    private JButton btnReschedule;
-    private JTextField txtMedication;
-    private JTextField txtDose;
-    private JTextField txtInstructions;
-    private JButton btnPrescribe;
-
-    // Tab 2 - Hospitalizations
-    private JTable tblHospitalizations;
-    private JButton btnApprove;
-    private JButton btnDeny;
-    private JButton btnRefreshHospitalizations;
-
-    // Tab 3 - My Info
-    private JTextField txtId;
-    private JTextField txtUsername;
-    private JTextField txtFirstname;
-    private JTextField txtLastname;
-    private JPasswordField txtPassword;
-    private JPasswordField txtPasswordConfirm;
-    private JTextField txtSpecialty;
-    private JTextField txtLicenseNumber;
-    private JTextField txtAssignedOffice;
-    private JButton btnSave;
-
     public DoctorView(String viewedUsername, String adminUsername) {
+        initComponents();
         this.viewedUsername = viewedUsername;
         this.adminUsername = adminUsername;
-        initComponents();
-        btnBack.setVisible(adminUsername != null);
+        this.setBackground(new Color(0, 0, 0, 0));
+        this.setLocationRelativeTo(null);
+        jButton11.setVisible(adminUsername != null);
+        ((DefaultTableModel) jTable1.getModel()).setRowCount(0);
+        ((DefaultTableModel) jTable3.getModel()).setRowCount(0);
         loadDoctorInfo();
-        loadAppointments();
-        loadHospitalizations();
+        loadPatients();
+        loadAppointmentCombos();
+        loadHospitalizationRequests();
+        loadAppointmentsTable(false);
     }
 
     private void loadDoctorInfo() {
-        Response r = DoctorController.getInfo(viewedUsername);
-        if (r.getStatus() == 200) {
-            HashMap<String, Object> data = r.getData();
-            lblDoctorName.setText(data.get("firstname") + " " + data.get("lastname"));
-            lblSpecialty.setText("" + data.get("specialty"));
-            txtId.setText("" + data.get("id"));
-            txtUsername.setText("" + data.get("username"));
-            txtFirstname.setText("" + data.get("firstname"));
-            txtLastname.setText("" + data.get("lastname"));
-            txtSpecialty.setText("" + data.get("specialty"));
-            txtLicenseNumber.setText("" + data.get("licenseNumber"));
-            txtAssignedOffice.setText("" + data.get("assignedOffice"));
+        Response response = DoctorController.getInfo(viewedUsername);
+        if (response.getStatus() == 200) {
+            jTextField1.setText((String) response.getData().get("firstname"));
+            jTextField2.setText((String) response.getData().get("lastname"));
+            jTextField6.setText((String) response.getData().get("licenceNumber"));
+            jTextField8.setText((String) response.getData().get("assignedOffice"));
+            jTextField7.setText((String) response.getData().get("username"));
+            selectSpecialty((String) response.getData().get("specialty"));
         }
     }
 
-    private void loadAppointments() {
-        boolean pendingOnly = "Pending".equals(cbFilter.getSelectedItem());
-        Response r = DoctorController.getAppointments(viewedUsername, pendingOnly);
-        DefaultTableModel model = (DefaultTableModel) tblAppointments.getModel();
-        model.setRowCount(0);
-        if (r.getStatus() == 200) {
-            Object[][] rows = (Object[][]) r.getData().get("appointments");
-            if (rows != null) {
-                for (Object[] row : rows) model.addRow(row);
+    private void selectSpecialty(String specialtyName) {
+        if (specialtyName == null) {
+            return;
+        }
+        for (int i = 0; i < jComboBox1.getItemCount(); i++) {
+            String item = jComboBox1.getItemAt(i);
+            String norm = item.toUpperCase().replace("&", " ").replaceAll("[^A-Z0-9]+", "_").replaceAll("^_|_$", "");
+            if (norm.equals(specialtyName)) {
+                jComboBox1.setSelectedIndex(i);
+                return;
             }
         }
     }
 
-    private void loadHospitalizations() {
-        Response r = HospitalizationController.getByDoctor(viewedUsername);
-        DefaultTableModel model = (DefaultTableModel) tblHospitalizations.getModel();
-        model.setRowCount(0);
-        if (r.getStatus() == 200) {
-            Object[][] rows = (Object[][]) r.getData().get("hospitalizations");
-            if (rows != null) {
-                for (Object[] row : rows) model.addRow(row);
+    private void loadPatients() {
+        Response response = PatientController.getAll();
+        if (response.getStatus() == 200) {
+            List<String> patients = (List<String>) response.getData().get("patients");
+            jComboBox5.removeAllItems();
+            jComboBox5.addItem("Select one");
+            for (String p : patients) {
+                jComboBox5.addItem(p);
             }
         }
     }
 
-    private String getSelectedAppointmentId() {
-        int row = tblAppointments.getSelectedRow();
-        if (row == -1) return null;
-        return (String) tblAppointments.getValueAt(row, 0);
+    private void loadAppointmentCombos() {
+        Response response = DoctorController.getDoctorAppointments(viewedUsername, false);
+        jComboBox2.removeAllItems();
+        jComboBox2.addItem("Select one");
+        jComboBox3.removeAllItems();
+        jComboBox3.addItem("Select one");
+        jComboBox4.removeAllItems();
+        jComboBox4.addItem("Select one");
+        jComboBox7.removeAllItems();
+        jComboBox7.addItem("Select one");
+        jComboBox8.removeAllItems();
+        jComboBox8.addItem("Select one");
+        if (response.getStatus() == 200) {
+            List<String[]> rows = (List<String[]>) response.getData().get("appointments");
+            for (String[] row : rows) {
+                String id = row[0];
+                String status = row[5];
+                if (status.equals("REQUESTED")) {
+                    jComboBox2.addItem(id);
+                }
+                if (status.equals("REQUESTED") || status.equals("PENDING")) {
+                    jComboBox3.addItem(id);
+                }
+                if (status.equals("PENDING")) {
+                    jComboBox4.addItem(id);
+                    jComboBox7.addItem(id);
+                    jComboBox8.addItem(id);
+                }
+            }
+        }
     }
 
-    private String getSelectedHospitalizationId() {
-        int row = tblHospitalizations.getSelectedRow();
-        if (row == -1) return null;
-        return (String) tblHospitalizations.getValueAt(row, 0);
+    private void loadHospitalizationRequests() {
+        Response response = HospitalizationController.getDoctorHospitalizations(viewedUsername, true);
+        jComboBox6.removeAllItems();
+        jComboBox6.addItem("Select one");
+        if (response.getStatus() == 200) {
+            List<String[]> rows = (List<String[]>) response.getData().get("hospitalizations");
+            for (String[] row : rows) {
+                jComboBox6.addItem(row[0]);
+            }
+        }
     }
 
+    private void loadAppointmentsTable(boolean onlyPending) {
+        Response response = DoctorController.getDoctorAppointments(viewedUsername, onlyPending);
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+        if (response.getStatus() == 200) {
+            List<String[]> rows = (List<String[]>) response.getData().get("appointments");
+            for (String[] row : rows) {
+                model.addRow(row);
+            }
+        }
+    }
+
+    private String cell(Object value) {
+        return value == null ? "" : value.toString();
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        setTitle("Doctor View");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(950, 680);
-        setLocationRelativeTo(null);
 
-        // --- Header ---
-        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        lblDoctorName = new JLabel("Doctor: ");
-        lblSpecialty  = new JLabel("Specialty: ");
-        btnBack   = new JButton("Back");
-        btnLogout = new JButton("Logout");
-        headerPanel.add(lblDoctorName);
-        headerPanel.add(lblSpecialty);
-        headerPanel.add(btnBack);
-        headerPanel.add(btnLogout);
+        panelRound1 = new views.PanelRound();
+        panelRound2 = new views.PanelRound();
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jButton11 = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel4 = new javax.swing.JPanel();
+        jRadioButton3 = new javax.swing.JRadioButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jRadioButton4 = new javax.swing.JRadioButton();
+        jButton12 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jComboBox5 = new javax.swing.JComboBox<>();
+        jLabel38 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jButton8 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField6 = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField7 = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jTextField8 = new javax.swing.JTextField();
+        jTextField9 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jTextField10 = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton9 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jSeparator1 = new javax.swing.JSeparator();
+        jButton3 = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jComboBox3 = new javax.swing.JComboBox<>();
+        jButton4 = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
+        jTextField13 = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jTextField14 = new javax.swing.JTextField();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jComboBox4 = new javax.swing.JComboBox<>();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jTextField21 = new javax.swing.JTextField();
+        jLabel29 = new javax.swing.JLabel();
+        jTextField22 = new javax.swing.JTextField();
+        jLabel30 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jButton6 = new javax.swing.JButton();
+        jComboBox6 = new javax.swing.JComboBox<>();
+        jRadioButton5 = new javax.swing.JRadioButton();
+        jRadioButton6 = new javax.swing.JRadioButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTextArea5 = new javax.swing.JTextArea();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTextArea6 = new javax.swing.JTextArea();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jTextArea7 = new javax.swing.JTextArea();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        jTextArea8 = new javax.swing.JTextArea();
+        jSeparator4 = new javax.swing.JSeparator();
+        jButton13 = new javax.swing.JButton();
+        jComboBox8 = new javax.swing.JComboBox<>();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        jTextArea9 = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jTextField24 = new javax.swing.JTextField();
+        jLabel33 = new javax.swing.JLabel();
+        jTextField25 = new javax.swing.JTextField();
+        jLabel34 = new javax.swing.JLabel();
+        jTextField26 = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        jTextField27 = new javax.swing.JTextField();
+        jLabel36 = new javax.swing.JLabel();
+        jTextField28 = new javax.swing.JTextField();
+        jLabel37 = new javax.swing.JLabel();
+        jTextField29 = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jButton7 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jComboBox7 = new javax.swing.JComboBox<>();
 
-        // --- Tab 1: Appointments ---
-        JPanel appointmentsTab = new JPanel(new BorderLayout());
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
-        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        cbFilter = new JComboBox<>(new String[]{"All", "Pending"});
-        btnRefreshAppointments = new JButton("Refresh");
-        filterPanel.add(new JLabel("Show:"));
-        filterPanel.add(cbFilter);
-        filterPanel.add(btnRefreshAppointments);
+        panelRound1.setRadius(50);
 
-        String[] apptCols = {"ID", "Patient", "Date", "Time", "Status", "Specialty"};
-        tblAppointments = new JTable(new DefaultTableModel(apptCols, 0));
-        tblAppointments.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        panelRound2.setRadius(50);
+        panelRound2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                panelRound2MouseDragged(evt);
+            }
+        });
+        panelRound2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                panelRound2MousePressed(evt);
+            }
+        });
 
-        JPanel actionsPanel = new JPanel();
-        actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.Y_AXIS));
+        jButton1.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton1.setText("X");
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton1.setFocusable(false);
+        jButton1.setRequestFocusEnabled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        btnAccept     = new JButton("Accept");
-        btnComplete   = new JButton("Complete");
-        btnHospitalize = new JButton("Hospitalize");
-        row1.add(btnAccept);
-        row1.add(btnComplete);
-        row1.add(btnHospitalize);
+        jLabel1.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
+        jLabel1.setText("DOCTOR VIEW");
 
-        JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        txtNewTime         = new JTextField(8);
-        txtRescheduleReason = new JTextField(15);
-        btnReschedule      = new JButton("Reschedule");
-        row2.add(new JLabel("New time (hh:mm):"));
-        row2.add(txtNewTime);
-        row2.add(new JLabel("Reason:"));
-        row2.add(txtRescheduleReason);
-        row2.add(btnReschedule);
+        jButton11.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton11.setText("Back");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
 
-        JPanel row3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        txtMedication  = new JTextField(10);
-        txtDose        = new JTextField(8);
-        txtInstructions = new JTextField(15);
-        btnPrescribe   = new JButton("Prescribe");
-        row3.add(new JLabel("Medication:"));
-        row3.add(txtMedication);
-        row3.add(new JLabel("Dose:"));
-        row3.add(txtDose);
-        row3.add(new JLabel("Instructions:"));
-        row3.add(txtInstructions);
-        row3.add(btnPrescribe);
+        javax.swing.GroupLayout panelRound2Layout = new javax.swing.GroupLayout(panelRound2);
+        panelRound2.setLayout(panelRound2Layout);
+        panelRound2Layout.setHorizontalGroup(
+            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(32, 32, 32)
+                .addComponent(jButton11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(19, 19, 19))
+        );
+        panelRound2Layout.setVerticalGroup(
+            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton11))
+        );
 
-        actionsPanel.add(row1);
-        actionsPanel.add(row2);
-        actionsPanel.add(row3);
+        jRadioButton3.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jRadioButton3.setText("Total appointments");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
 
-        appointmentsTab.add(filterPanel, BorderLayout.NORTH);
-        appointmentsTab.add(new JScrollPane(tblAppointments), BorderLayout.CENTER);
-        appointmentsTab.add(actionsPanel, BorderLayout.SOUTH);
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Date", "Patient", "Specialty", "Type", "Status"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable2);
 
-        // --- Tab 2: Hospitalizations ---
-        JPanel hospitalizationsTab = new JPanel(new BorderLayout());
+        jRadioButton4.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jRadioButton4.setText("Pending appointments");
+        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton4ActionPerformed(evt);
+            }
+        });
 
-        String[] hospCols = {"ID", "Patient", "Date", "Status", "Room Type"};
-        tblHospitalizations = new JTable(new DefaultTableModel(hospCols, 0));
-        tblHospitalizations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jButton12.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton12.setText("Logout");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
 
-        JPanel hospActions = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        btnApprove = new JButton("Approve");
-        btnDeny    = new JButton("Deny");
-        btnRefreshHospitalizations = new JButton("Refresh");
-        hospActions.add(btnApprove);
-        hospActions.add(btnDeny);
-        hospActions.add(btnRefreshHospitalizations);
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton12)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addGap(16, 16, 16)
+                            .addComponent(jRadioButton3)
+                            .addGap(18, 18, 18)
+                            .addComponent(jRadioButton4))
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addGap(108, 108, 108)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(152, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton3)
+                    .addComponent(jRadioButton4))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(jButton12)
+                .addGap(23, 23, 23))
+        );
 
-        hospitalizationsTab.add(new JScrollPane(tblHospitalizations), BorderLayout.CENTER);
-        hospitalizationsTab.add(hospActions, BorderLayout.SOUTH);
+        jTabbedPane1.addTab("Appointments visualization", jPanel4);
 
-        // --- Tab 3: My Info ---
-        JPanel infoTab = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        txtId              = new JTextField(15); txtId.setEnabled(false);
-        txtUsername        = new JTextField(15);
-        txtFirstname       = new JTextField(15);
-        txtLastname        = new JTextField(15);
-        txtPassword        = new JPasswordField(15);
-        txtPasswordConfirm = new JPasswordField(15);
-        txtSpecialty       = new JTextField(15);
-        txtLicenseNumber   = new JTextField(15);
-        txtAssignedOffice  = new JTextField(10);
-        btnSave = new JButton("Save");
+        jComboBox5.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select one" }));
 
-        infoTab.add(new JLabel("ID:")); infoTab.add(txtId);
-        infoTab.add(new JLabel("Username:")); infoTab.add(txtUsername);
-        infoTab.add(new JLabel("First name:")); infoTab.add(txtFirstname);
-        infoTab.add(new JLabel("Last name:")); infoTab.add(txtLastname);
-        infoTab.add(new JLabel("Password:")); infoTab.add(txtPassword);
-        infoTab.add(new JLabel("Confirm password:")); infoTab.add(txtPasswordConfirm);
-        infoTab.add(new JLabel("Specialty:")); infoTab.add(txtSpecialty);
-        infoTab.add(new JLabel("License number:")); infoTab.add(txtLicenseNumber);
-        infoTab.add(new JLabel("Office:")); infoTab.add(txtAssignedOffice);
-        infoTab.add(btnSave);
+        jLabel38.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel38.setText("Patient");
 
-        // --- Tabbed pane ---
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Appointments", appointmentsTab);
-        tabbedPane.addTab("Hospitalizations", hospitalizationsTab);
-        tabbedPane.addTab("My Info", infoTab);
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Date", "Doctor", "Specialty", "Type", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
 
-        // --- Main layout ---
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(headerPanel, BorderLayout.NORTH);
-        getContentPane().add(tabbedPane, BorderLayout.CENTER);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(jTable3);
 
-        // --- Wire up events ---
-        btnBack.addActionListener(evt -> btnBackActionPerformed());
-        btnLogout.addActionListener(evt -> btnLogoutActionPerformed());
-        cbFilter.addActionListener(evt -> loadAppointments());
-        btnRefreshAppointments.addActionListener(evt -> loadAppointments());
-        btnAccept.addActionListener(evt -> btnAcceptActionPerformed());
-        btnComplete.addActionListener(evt -> btnCompleteActionPerformed());
-        btnHospitalize.addActionListener(evt -> btnHospitalizeActionPerformed());
-        btnReschedule.addActionListener(evt -> btnRescheduleActionPerformed());
-        btnPrescribe.addActionListener(evt -> btnPrescribeActionPerformed());
-        btnApprove.addActionListener(evt -> btnApproveActionPerformed());
-        btnDeny.addActionListener(evt -> btnDenyActionPerformed());
-        btnRefreshHospitalizations.addActionListener(evt -> loadHospitalizations());
-        btnSave.addActionListener(evt -> btnSaveActionPerformed());
+        jButton8.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton8.setText("Search");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel38)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(99, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton8)
+                .addGap(601, 601, 601))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel38)
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
+                .addComponent(jButton8)
+                .addContainerGap(67, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("History Appointments of a patient", jPanel5);
+
+        jLabel2.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel2.setText("Firstname");
+
+        jTextField1.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel3.setText("Lastname");
+
+        jTextField2.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel5.setText("Specialty");
+
+        jLabel7.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel7.setText("License Number");
+
+        jTextField6.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel8.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel8.setText("Assigned office");
+
+        jTextField7.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel9.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("User");
+
+        jTextField8.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jTextField9.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel10.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Password");
+
+        jLabel11.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel11.setText("Password confirmation");
+
+        jTextField10.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jComboBox1.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select one", "General Medicine", "Cardiology", "Pediatrics", "Neurology", "Traumatology & Orthopedics", "Gynecology & Obstetrics", "Dermatology", "Psychiatry", "Oncology", "Ophthalmology", "Internal Medicine" }));
+
+        jButton9.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton9.setText("Save");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(211, 211, 211)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(351, 351, 351)
+                        .addComponent(jLabel7)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(558, 558, 558)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(521, 521, 521)
+                        .addComponent(jLabel11))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(576, 576, 576)
+                        .addComponent(jButton9))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(561, 561, 561)
+                        .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(269, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(30, 30, 30)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel10)
+                .addGap(27, 27, 27)
+                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel11)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(jButton9)
+                .addContainerGap(161, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Modify info", jPanel3);
+
+        jLabel14.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Appointment ID");
+
+        jLabel13.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel13.setText("Accept medical appointment");
+
+        jComboBox2.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select one" }));
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jButton3.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton3.setText("Accept");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("Reschedule medical appointment");
+
+        jLabel16.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("Appointment");
+
+        jComboBox3.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select one" }));
+
+        jButton4.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton4.setText("Accept");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jLabel17.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("New time appointment");
+
+        jTextField13.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel18.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("Reason for appointment");
+
+        jTextField14.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jLabel19.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setText("Complete medical appointment");
+
+        jLabel20.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel20.setText("Appointment");
+
+        jComboBox4.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select one" }));
+
+        jLabel21.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel21.setText("Diagnosis");
+
+        jLabel22.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel22.setText("Observations");
+
+        jLabel23.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel23.setText("Recommended treatment");
+
+        jLabel24.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel24.setText("Follow-up indication");
+
+        jButton5.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton5.setText("Complete");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel25.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel25.setText("Hospitalization");
+
+        jLabel27.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel27.setText("Reason for hospitalization");
+
+        jLabel28.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel28.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel28.setText("Date of entry");
+
+        jTextField21.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel29.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel29.setText("Estimated duration");
+
+        jTextField22.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel30.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel30.setText("Observations");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jButton6.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton6.setText("Generate");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jComboBox6.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select one" }));
+
+        jRadioButton5.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jRadioButton5.setText("Requests");
+
+        jRadioButton6.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jRadioButton6.setText("Patient ID");
+
+        jTextArea5.setColumns(20);
+        jTextArea5.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jTextArea5.setRows(5);
+        jScrollPane6.setViewportView(jTextArea5);
+
+        jTextArea6.setColumns(20);
+        jTextArea6.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jTextArea6.setRows(5);
+        jScrollPane7.setViewportView(jTextArea6);
+
+        jTextArea7.setColumns(20);
+        jTextArea7.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jTextArea7.setRows(5);
+        jScrollPane8.setViewportView(jTextArea7);
+
+        jTextArea8.setColumns(20);
+        jTextArea8.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jTextArea8.setRows(5);
+        jScrollPane9.setViewportView(jTextArea8);
+
+        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jButton13.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton13.setText("Cancel");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+
+        jComboBox8.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jComboBox8.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select one" }));
+
+        jTextArea9.setColumns(20);
+        jTextArea9.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jTextArea9.setRows(5);
+        jScrollPane10.setViewportView(jTextArea9);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jButton3)
+                                        .addGap(87, 87, 87))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(67, 67, 67))))
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel13)
+                        .addGap(22, 22, 22)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(90, 90, 90)
+                                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(99, 99, 99)
+                                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(98, 98, 98)
+                                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(112, 112, 112)
+                                    .addComponent(jButton4)))
+                            .addGap(91, 91, 91))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(112, 112, 112)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(99, 99, 99)
+                                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 25, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(42, 42, 42)
+                                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(41, 41, 41)
+                                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(42, 42, 42)
+                                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(43, 43, 43)
+                                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(121, 121, 121)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton6))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(56, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(jRadioButton5)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jRadioButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(19, 19, 19))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(47, 47, 47))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel19)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel20)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel21)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel22)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel23)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel24)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton5)
+                        .addGap(12, 12, 12))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jLabel13)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel14)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addComponent(jButton3))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel15)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel16)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel17)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel18)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(jButton4)))
+                        .addGap(18, 18, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel25)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton5)
+                    .addComponent(jRadioButton6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel27)
+                .addGap(16, 16, 16)
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel28)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel29)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel30)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton6)
+                    .addComponent(jButton13))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+
+        jTabbedPane1.addTab("Request/Appointments", jPanel1);
+
+        jLabel31.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel31.setText("Appointment ID");
+
+        jLabel32.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel32.setText("Medication name");
+
+        jTextField24.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel33.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel33.setText("Dose");
+
+        jTextField25.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel34.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel34.setText("Administration route");
+
+        jTextField26.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel35.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel35.setText("Frecuency");
+
+        jTextField27.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel36.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel36.setText("Treatment duration");
+
+        jTextField28.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jLabel37.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jLabel37.setText("Additional instructions");
+
+        jTextField29.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Appointment ID", "Medication name", "Dose", "Administration route", "Treatment duration", "Additional instructions", "Frecuency"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jTable1);
+
+        jButton7.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton7.setText("Add");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton10.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton10.setText("Prescribe");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
+        jComboBox7.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select one" }));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel31)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(9, 9, 9)
+                                        .addComponent(jLabel32))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel36)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTextField28, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel37)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTextField29, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel35)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTextField27, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel33)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTextField25, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel34)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTextField26, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton7))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(583, 583, 583)
+                        .addComponent(jButton10)))
+                .addContainerGap(108, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(57, 57, 57)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel31)
+                    .addComponent(jLabel32)
+                    .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel33)
+                    .addComponent(jTextField25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34)
+                    .addComponent(jTextField26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton7)
+                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel36)
+                    .addComponent(jTextField28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel37)
+                    .addComponent(jTextField29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel35)
+                    .addComponent(jTextField27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addComponent(jButton10)
+                .addContainerGap(64, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Prescribe medications", jPanel2);
+
+        javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
+        panelRound1.setLayout(panelRound1Layout);
+        panelRound1Layout.setHorizontalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound1Layout.createSequentialGroup()
+                .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelRound2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        panelRound1Layout.setVerticalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound1Layout.createSequentialGroup()
+                .addComponent(panelRound2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelRound1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelRound1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         pack();
-    }
+    }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAcceptActionPerformed() {
-        String id = getSelectedAppointmentId();
-        if (id == null) { JOptionPane.showMessageDialog(this, "Select an appointment first."); return; }
-        Response r = DoctorController.acceptAppointment(id);
-        JOptionPane.showMessageDialog(this, r.getMessage());
-        if (r.getStatus() == 200) loadAppointments();
-    }
+    private void panelRound2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRound2MousePressed
+        x = evt.getX();
+        y = evt.getY();
+    }//GEN-LAST:event_panelRound2MousePressed
 
-    private void btnCompleteActionPerformed() {
-        String id = getSelectedAppointmentId();
-        if (id == null) { JOptionPane.showMessageDialog(this, "Select an appointment first."); return; }
-        Response r = DoctorController.completeAppointment(id);
-        JOptionPane.showMessageDialog(this, r.getMessage());
-        if (r.getStatus() == 200) loadAppointments();
-    }
+    private void panelRound2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRound2MouseDragged
+        this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
+    }//GEN-LAST:event_panelRound2MouseDragged
 
-    private void btnRescheduleActionPerformed() {
-        String id = getSelectedAppointmentId();
-        if (id == null) { JOptionPane.showMessageDialog(this, "Select an appointment first."); return; }
-        String newTime = txtNewTime.getText().trim();
-        String reason  = txtRescheduleReason.getText().trim();
-        Response r = DoctorController.rescheduleAppointment(id, newTime, reason);
-        JOptionPane.showMessageDialog(this, r.getMessage());
-        if (r.getStatus() == 200) {
-            txtNewTime.setText("");
-            txtRescheduleReason.setText("");
-            loadAppointments();
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
+        jRadioButton3.setSelected(false);
+        loadAppointmentsTable(true);
+    }//GEN-LAST:event_jRadioButton4ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        String firstname = jTextField1.getText();
+        String lastname = jTextField2.getText();
+        String specialty = (String) jComboBox1.getSelectedItem();
+        String licenseNumber = jTextField6.getText();
+        String assignedOffice = jTextField8.getText();
+        String username = jTextField7.getText();
+        String password = jTextField9.getText();
+        String passwordConfirm = jTextField10.getText();
+
+        Response response = DoctorController.update(viewedUsername, firstname, lastname, specialty,
+                licenseNumber, assignedOffice, username, password, passwordConfirm);
+
+        JOptionPane.showMessageDialog(this, response.getMessage());
+
+        if (response.getStatus() == 200) {
+            jTextField9.setText("");
+            jTextField10.setText("");
         }
-    }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void btnPrescribeActionPerformed() {
-        String id = getSelectedAppointmentId();
-        if (id == null) { JOptionPane.showMessageDialog(this, "Select an appointment first."); return; }
-        String medication   = txtMedication.getText().trim();
-        String dose         = txtDose.getText().trim();
-        String instructions = txtInstructions.getText().trim();
-        Response r = DoctorController.prescribe(id, medication, dose, instructions);
-        JOptionPane.showMessageDialog(this, r.getMessage());
-        if (r.getStatus() == 200) {
-            txtMedication.setText("");
-            txtDose.setText("");
-            txtInstructions.setText("");
-        }
-    }
-
-    private void btnHospitalizeActionPerformed() {
-        String id = getSelectedAppointmentId();
-        if (id == null) { JOptionPane.showMessageDialog(this, "Select an appointment first."); return; }
-        Response r = DoctorController.hospitalizeFromAppointment(id);
-        JOptionPane.showMessageDialog(this, r.getMessage());
-        if (r.getStatus() == 200) {
-            loadAppointments();
-            loadHospitalizations();
-        }
-    }
-
-    private void btnApproveActionPerformed() {
-        String id = getSelectedHospitalizationId();
-        if (id == null) { JOptionPane.showMessageDialog(this, "Select a hospitalization first."); return; }
-        Response r = HospitalizationController.approve(id);
-        JOptionPane.showMessageDialog(this, r.getMessage());
-        if (r.getStatus() == 200) loadHospitalizations();
-    }
-
-    private void btnDenyActionPerformed() {
-        String id = getSelectedHospitalizationId();
-        if (id == null) { JOptionPane.showMessageDialog(this, "Select a hospitalization first."); return; }
-        Response r = HospitalizationController.deny(id);
-        JOptionPane.showMessageDialog(this, r.getMessage());
-        if (r.getStatus() == 200) loadHospitalizations();
-    }
-
-    private void btnSaveActionPerformed() {
-        String id              = txtId.getText().trim();
-        String username        = txtUsername.getText().trim();
-        String firstname       = txtFirstname.getText().trim();
-        String lastname        = txtLastname.getText().trim();
-        String password        = new String(txtPassword.getPassword()).trim();
-        String passwordConfirm = new String(txtPasswordConfirm.getPassword()).trim();
-        String specialty       = txtSpecialty.getText().trim();
-        String licenseNumber   = txtLicenseNumber.getText().trim();
-        String office          = txtAssignedOffice.getText().trim();
-        Response r = DoctorController.update(id, username, firstname, lastname, password, passwordConfirm, specialty, licenseNumber, office);
-        JOptionPane.showMessageDialog(this, r.getMessage());
-        if (r.getStatus() == 200) {
-            txtPassword.setText("");
-            txtPasswordConfirm.setText("");
-            loadDoctorInfo();
-        }
-    }
-
-    private void btnLogoutActionPerformed() {
-        new LoginView().setVisible(true);
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        LoginView login = new LoginView();
         this.dispose();
-    }
+        login.setVisible(true);
+    }//GEN-LAST:event_jButton12ActionPerformed
 
-    private void btnBackActionPerformed() {
-        new AdminView(adminUsername).setVisible(true);
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        AdminView admin = new AdminView(adminUsername);
         this.dispose();
-    }
+        admin.setVisible(true);
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        if (jRadioButton5.isSelected()) {
+            String hospitalizationId = (String) jComboBox6.getSelectedItem();
+            Response response = HospitalizationController.denyHospitalization(hospitalizationId);
+            JOptionPane.showMessageDialog(this, response.getMessage());
+            if (response.getStatus() == 200) {
+                loadHospitalizationRequests();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione 'Requests' para cancelar una solicitud");
+        }
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if (jRadioButton5.isSelected()) {
+            String hospitalizationId = (String) jComboBox6.getSelectedItem();
+            Response response = HospitalizationController.approveHospitalization(hospitalizationId);
+            JOptionPane.showMessageDialog(this, response.getMessage());
+            if (response.getStatus() == 200) {
+                loadHospitalizationRequests();
+            }
+        } else if (jRadioButton6.isSelected()) {
+            String appointmentId = (String) jComboBox8.getSelectedItem();
+            String reason = jTextArea9.getText();
+            String admissionDate = jTextField21.getText();
+            String observations = jTextArea1.getText();
+            Response response = HospitalizationController.hospitalizeFromAppointment(appointmentId, reason,
+                    admissionDate, observations);
+            JOptionPane.showMessageDialog(this, response.getMessage());
+            if (response.getStatus() == 200) {
+                jTextArea9.setText("");
+                jTextField21.setText("");
+                jTextField22.setText("");
+                jTextArea1.setText("");
+                loadAppointmentCombos();
+                loadAppointmentsTable(jRadioButton4.isSelected());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione 'Requests' o 'Patient ID'");
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        String patient = (String) jComboBox5.getSelectedItem();
+        Response response = PatientController.getAppointments(patient);
+        DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
+        model.setRowCount(0);
+        if (response.getStatus() == 200) {
+            List<String[]> rows = (List<String[]>) response.getData().get("appointments");
+            for (String[] row : rows) {
+                model.addRow(row);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage());
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        jRadioButton4.setSelected(false);
+        loadAppointmentsTable(false);
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String appointmentId = (String) jComboBox2.getSelectedItem();
+        Response response = DoctorController.acceptAppointment(appointmentId);
+        JOptionPane.showMessageDialog(this, response.getMessage());
+        if (response.getStatus() == 200) {
+            loadAppointmentCombos();
+            loadAppointmentsTable(jRadioButton4.isSelected());
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        String appointmentId = (String) jComboBox4.getSelectedItem();
+        String diagnosis = jTextArea5.getText();
+        String observations = jTextArea6.getText();
+        String recommendedTreatment = jTextArea7.getText();
+        String followUp = jTextArea8.getText();
+
+        Response response = DoctorController.completeAppointment(appointmentId, diagnosis, observations,
+                recommendedTreatment, followUp);
+
+        JOptionPane.showMessageDialog(this, response.getMessage());
+
+        if (response.getStatus() == 200) {
+            jTextArea5.setText("");
+            jTextArea6.setText("");
+            jTextArea7.setText("");
+            jTextArea8.setText("");
+            loadAppointmentCombos();
+            loadAppointmentsTable(jRadioButton4.isSelected());
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        String appointmentId = (String) jComboBox7.getSelectedItem();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        List<String[]> medications = new ArrayList<>();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            medications.add(new String[]{
+                cell(model.getValueAt(i, 1)),
+                cell(model.getValueAt(i, 2)),
+                cell(model.getValueAt(i, 3)),
+                cell(model.getValueAt(i, 4)),
+                cell(model.getValueAt(i, 5)),
+                cell(model.getValueAt(i, 6))
+            });
+        }
+        Response response = DoctorController.prescribe(appointmentId, medications);
+        JOptionPane.showMessageDialog(this, response.getMessage());
+        if (response.getStatus() == 200) {
+            model.setRowCount(0);
+        }
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{
+            jComboBox7.getSelectedItem(),
+            jTextField24.getText(),
+            jTextField25.getText(),
+            jTextField26.getText(),
+            jTextField28.getText(),
+            jTextField29.getText(),
+            jTextField27.getText()
+        });
+        jTextField24.setText("");
+        jTextField25.setText("");
+        jTextField26.setText("");
+        jTextField28.setText("");
+        jTextField29.setText("");
+        jTextField27.setText("");
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        String appointmentId = (String) jComboBox3.getSelectedItem();
+        String newTime = jTextField13.getText();
+        String newReason = jTextField14.getText();
+
+        Response response = DoctorController.rescheduleAppointment(appointmentId, newTime, newReason);
+
+        JOptionPane.showMessageDialog(this, response.getMessage());
+
+        if (response.getStatus() == 200) {
+            jTextField13.setText("");
+            jTextField14.setText("");
+            loadAppointmentsTable(jRadioButton4.isSelected());
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> jComboBox4;
+    private javax.swing.JComboBox<String> jComboBox5;
+    private javax.swing.JComboBox<String> jComboBox6;
+    private javax.swing.JComboBox<String> jComboBox7;
+    private javax.swing.JComboBox<String> jComboBox8;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton jRadioButton4;
+    private javax.swing.JRadioButton jRadioButton5;
+    private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea5;
+    private javax.swing.JTextArea jTextArea6;
+    private javax.swing.JTextArea jTextArea7;
+    private javax.swing.JTextArea jTextArea8;
+    private javax.swing.JTextArea jTextArea9;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField10;
+    private javax.swing.JTextField jTextField13;
+    private javax.swing.JTextField jTextField14;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField21;
+    private javax.swing.JTextField jTextField22;
+    private javax.swing.JTextField jTextField24;
+    private javax.swing.JTextField jTextField25;
+    private javax.swing.JTextField jTextField26;
+    private javax.swing.JTextField jTextField27;
+    private javax.swing.JTextField jTextField28;
+    private javax.swing.JTextField jTextField29;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField jTextField9;
+    private views.PanelRound panelRound1;
+    private views.PanelRound panelRound2;
+    // End of variables declaration//GEN-END:variables
 }

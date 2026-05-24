@@ -5,7 +5,7 @@
 package core.models;
 
 import java.util.HashMap;
-import views.User;
+import core.models.User;
 
 /**
  *

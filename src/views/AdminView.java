@@ -436,9 +436,12 @@ public class AdminView extends javax.swing.JFrame {
             specialty, licenseNumber, assignedOffice
         );
 
-        JOptionPane.showMessageDialog(this, response.getMessage());
-
-        if (response.getStatus() == 200) {
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
             txtFirstname.setText("");
             txtLastname.setText("");
             txtId.setText("");
@@ -459,7 +462,7 @@ public class AdminView extends javax.swing.JFrame {
             return;
         }
         DoctorView doctor = new DoctorView(selectedDoctor, adminUsername);
-        this.setVisible(false);
+        this.dispose();
         doctor.setVisible(true);
     }
 
@@ -470,13 +473,13 @@ public class AdminView extends javax.swing.JFrame {
             return;
         }
         PatientView patient = new PatientView(selectedPatient, adminUsername);
-        this.setVisible(false);
+        this.dispose();
         patient.setVisible(true);
     }
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {
         LoginView login = new LoginView();
-        this.setVisible(false);
+        this.dispose();
         login.setVisible(true);
     }
 
