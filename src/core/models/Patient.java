@@ -9,7 +9,6 @@ import core.models.Appointment;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import packagee.User;
 
 /**
  *
