@@ -3,8 +3,8 @@ package core.controllers;
 import core.controllers.utils.Response;
 import core.models.Administrator;
 import core.models.Doctor;
-import core.models.User;
 import java.util.HashMap;
+import packagee.User;
 import storage.Database;
 
 public class AuthController {

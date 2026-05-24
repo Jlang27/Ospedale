@@ -386,7 +386,7 @@ public class LoginView extends javax.swing.JFrame {
     }
     private void btnEnterActionPerformed(java.awt.event.ActionEvent evt) {
     String username = txtUser.getText();
-    String password = new String(txtPassword.getPassword());
+    String password = txtPassword.getText();
 
     Response response = AuthController.login(username, password);
     JOptionPane.showMessageDialog(this, response.getMessage());
